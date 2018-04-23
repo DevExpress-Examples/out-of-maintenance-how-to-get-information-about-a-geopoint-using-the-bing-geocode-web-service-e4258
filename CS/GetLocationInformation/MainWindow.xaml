@@ -1,0 +1,47 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:dxm="http://schemas.devexpress.com/winfx/2008/xaml/map"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+        x:Class="GetLocationInformation.MainWindow"
+        Title="MainWindow" Height="640" Width="930" MinWidth="930" MinHeight="640">
+    <Window.Resources>
+        <sys:String x:Key="YourBingKey">
+            YOUR_BING_MAPS_HERE
+        </sys:String>
+    </Window.Resources>
+    <Grid>
+        <dxlc:LayoutControl>
+            <dxm:MapControl x:Name="mapControl1" Grid.Row="0" Grid.Column="0">
+                <dxm:ImageTilesLayer>
+                    <dxm:ImageTilesLayer.DataProvider>
+                        <dxm:BingMapDataProvider Kind="Road" BingKey="{Binding Source={StaticResource YourBingKey}}"/>
+                    </dxm:ImageTilesLayer.DataProvider>
+                </dxm:ImageTilesLayer>
+                <dxm:InformationLayer>
+                    <dxm:InformationLayer.DataProvider>
+                        <!--region #LocationInformationReceived-->
+                        <dxm:BingGeocodeDataProvider x:Name="geocodeProvider"   ProcessMouseEvents="False"
+						BingKey="{Binding Source={StaticResource YourBingKey}}" 
+						LocationInformationReceived="geocodeProvider_LocationInformationReceived"/>
+                        <!--endregion #LocationInformationReceived-->
+                    </dxm:InformationLayer.DataProvider>
+                </dxm:InformationLayer>
+            </dxm:MapControl>
+            <dxlc:LayoutGroup View="Group" Width="250" Orientation="Vertical">
+                <dxlc:LayoutItem Label="Latitude:">
+                    <TextBox x:Name="tbLatitude"/>
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Longitude:">
+                    <TextBox x:Name="tbLongitude"/>
+                </dxlc:LayoutItem>
+                <Button Content="Request Location" HorizontalAlignment="Right" VerticalAlignment="Top" TabIndex="5" Click="requestLocation_Click"/>
+                <ScrollViewer CanContentScroll="True"
+                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible">
+                    <TextBlock Name="tbResults" Foreground="Red" TextWrapping="Wrap" Width="350" />
+                </ScrollViewer>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+    </Grid>
+</Window>
